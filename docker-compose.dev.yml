@@ -1,0 +1,33 @@
+version: '3.5'
+
+services:
+  mariadev:
+    image: mariadb
+    container_name: rams-dev-maria
+    restart: always
+    ports:
+      - ${DB_PORT}:3306
+    environment:
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_USER: ${DB_USERNAME}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+    volumes:
+      - mariadatadev:/var/lib/mariadb
+    networks:
+      - ramsdev
+
+  adminer:
+    image: adminer
+    container_name: rams-dev-adminer
+    restart: always
+    ports:
+      - 8080:8080
+    networks:
+      - ramsdev
+
+volumes:
+  mariadatadev:
+
+networks: 
+  ramsdev:

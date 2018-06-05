@@ -1,0 +1,15 @@
+# npm
+node_modules
+npm-debug.log
+
+# IDE
+.vscode
+
+# build
+dist
+
+# test coverage
+coverage
+
+# Configuration files
+.env

@@ -1,0 +1,43 @@
+version: '3.5'
+
+services:
+  rams-app:
+    build: ./
+    image: rams-app
+    container_name: rams-prod-app
+    restart: always
+    ports:
+      - 80:3000
+    links:
+      - maria
+    depends_on:
+      - maria
+    environment:
+      - NODE_ENV=production
+      - DB_PASSWORD
+      - DB_ROOT_PASSWORD
+    entrypoint: ["./bin/wait-for-it.sh", "maria:3306", "--", "pm2-docker", "start", "process.json"]
+    networks:
+      - ramsprod
+
+  maria:
+    image: mariadb
+    container_name: rams-prod-maria
+    restart: always
+    ports:
+      - ${DB_PORT}:3306
+    environment:
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_USER: ${DB_USERNAME}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+    volumes:
+      - mariadataprod:/var/lib/mariadb
+    networks:
+      - ramsprod
+
+volumes:
+  mariadataprod:
+
+networks: 
+  ramsprod:
